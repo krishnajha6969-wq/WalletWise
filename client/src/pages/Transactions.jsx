@@ -61,13 +61,13 @@ const Transactions = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`btn-secondary flex items-center gap-2 relative ${showFilters ? 'border-primary-500/20 text-primary-400' : ''}`}
+            className={`btn-secondary flex items-center gap-2 relative ${showFilters ? 'border-accent-500/20 text-accent-400' : ''}`}
             style={{ padding: '10px 16px' }}
           >
             <HiOutlineFilter className="text-lg" />
             <span className="hidden sm:inline text-sm">Filters</span>
             {hasFilters && (
-              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary-500" style={{ animation: 'pulse-glow 2s infinite', boxShadow: '0 0 8px rgba(99,102,241,0.5)' }} />
+              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-accent-500" style={{ animation: 'pulse-glow 2s infinite', boxShadow: '0 0 8px rgba(34,197,94,0.5)' }} />
             )}
           </button>
           <button onClick={() => setShowForm(true)} className="btn-primary flex items-center gap-2 group">
@@ -109,7 +109,7 @@ const Transactions = () => {
               <input type="date" value={filters.endDate} onChange={(e) => { setFilters({ ...filters, endDate: e.target.value }); setPage(1); }} className="input-field w-44" />
             </div>
             {hasFilters && (
-              <button onClick={clearFilters} className="btn-secondary text-sm flex items-center gap-1.5 text-expense hover:text-expense-light" style={{ padding: '10px 14px' }}>
+              <button onClick={clearFilters} className="btn-secondary text-sm flex items-center gap-1.5 text-red-400 hover:text-red-300" style={{ padding: '10px 14px' }}>
                 <HiOutlineX className="text-sm" />
                 Clear
               </button>
@@ -131,7 +131,7 @@ const Transactions = () => {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
               <button key={p} onClick={() => setPage(p)} className={`w-10 h-10 rounded-xl text-sm font-medium transition-all duration-300 ${
                 p === page ? 'text-white' : 'text-dark-400 hover:text-dark-200 hover:bg-dark-800/40'
-              }`} style={p === page ? { background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.25)' } : {}}>
+              }`} style={p === page ? { background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.2)' } : {}}>
                 {p}
               </button>
             ))}

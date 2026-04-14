@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { mockApi } from '../services/mockData';
 import toast from 'react-hot-toast';
+import useCountUp from '../hooks/useCountUp';
 import SpendingPieChart from '../components/Charts/SpendingPieChart';
 import MonthlyBarChart from '../components/Charts/MonthlyBarChart';
 import TransactionList from '../components/TransactionList';
@@ -14,6 +15,35 @@ import {
   HiOutlineSparkles,
 } from 'react-icons/hi';
 
+const StatCard = ({ label, rawValue, prefix, icon: Icon, colorClass, iconBg, iconColor, glowColor, delay }) => {
+  const animatedValue = useCountUp(rawValue, 1500);
+  const formatted = `₹${Math.abs(animatedValue).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+  return (
+    <div
+      className="glass-card-hover p-7 relative"
+      style={{
+        animation: `slideUp 0.5s ease-out ${delay}s both`,
+        boxShadow: glowColor ? `0 0 40px ${glowColor}, inset 0 1px 0 rgba(255,255,255,0.04)` : undefined,
+      }}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-sm text-dark-500 font-medium tracking-wider uppercase">{label}</span>
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: iconBg }}>
+          <Icon className={`text-2xl ${iconColor}`} />
+        </div>
+      </div>
+      <p className={`text-4xl lg:text-5xl font-display font-bold ${colorClass}`} style={{ letterSpacing: '-0.02em' }}>
+        {prefix}{formatted}
+      </p>
+      <div className="mt-2 flex items-center gap-1.5">
+        <HiOutlineSparkles className="text-accent-400 text-xs" />
+        <span className="text-xs text-dark-500">This year</span>
+      </div>
+    </div>
+  );
+};
+
 const Dashboard = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState({ income: 0, expense: 0, balance: 0 });
@@ -23,9 +53,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    loadDashboard();
-  }, []);
+  useEffect(() => { loadDashboard(); }, []);
 
   const loadDashboard = async () => {
     setLoading(true);
@@ -35,11 +63,9 @@ const Dashboard = () => {
         mockApi.getMonthlySummary(new Date().getFullYear()),
         mockApi.getCategoryBreakdown({ year: new Date().getFullYear() }),
       ]);
-
       setRecentTransactions(txRes.transactions);
       setMonthlyData(monthlyRes.data);
       setCategoryBreakdown(categoryRes.breakdown);
-
       const totals = monthlyRes.data.reduce(
         (acc, m) => ({ income: acc.income + m.income, expense: acc.expense + m.expense }),
         { income: 0, expense: 0 }
@@ -52,136 +78,88 @@ const Dashboard = () => {
     }
   };
 
-  const formatCurrency = (val) =>
-    `₹${Math.abs(val).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
-
-  const statCards = [
-    {
-      label: 'Total Balance',
-      value: formatCurrency(stats.balance),
-      prefix: stats.balance >= 0 ? '+' : '-',
-      icon: HiOutlineCash,
-      colorClass: stats.balance >= 0 ? 'gradient-text-income' : 'gradient-text-expense',
-      iconBg: stats.balance >= 0 ? 'rgba(16,185,129,0.1)' : 'rgba(244,63,94,0.1)',
-      iconColor: stats.balance >= 0 ? 'text-income-light' : 'text-expense-light',
-      gradient: stats.balance >= 0
-        ? 'radial-gradient(circle at top right, rgba(16,185,129,0.08) 0%, transparent 60%)'
-        : 'radial-gradient(circle at top right, rgba(244,63,94,0.08) 0%, transparent 60%)',
-    },
-    {
-      label: 'Total Income',
-      value: formatCurrency(stats.income),
-      prefix: '+',
-      icon: HiOutlineTrendingUp,
-      colorClass: 'gradient-text-income',
-      iconBg: 'rgba(16,185,129,0.1)',
-      iconColor: 'text-income-light',
-      gradient: 'radial-gradient(circle at top right, rgba(16,185,129,0.08) 0%, transparent 60%)',
-    },
-    {
-      label: 'Total Expenses',
-      value: formatCurrency(stats.expense),
-      prefix: '-',
-      icon: HiOutlineTrendingDown,
-      colorClass: 'gradient-text-expense',
-      iconBg: 'rgba(244,63,94,0.1)',
-      iconColor: 'text-expense-light',
-      gradient: 'radial-gradient(circle at top right, rgba(244,63,94,0.08) 0%, transparent 60%)',
-    },
-  ];
-
   const greeting = () => {
     const h = new Date().getHours();
     if (h < 12) return { text: 'Good morning', emoji: '☀️' };
     if (h < 17) return { text: 'Good afternoon', emoji: '🌤️' };
     return { text: 'Good evening', emoji: '🌙' };
   };
-
   const g = greeting();
 
   return (
     <div className="page-container">
       {/* Header */}
-      <div className="flex items-center justify-between mb-10" style={{ animation: 'slideUp 0.6s ease-out' }}>
+      <div className="flex items-center justify-between mb-8" style={{ animation: 'slideUp 0.5s ease-out' }}>
         <div>
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-2.5 mb-2">
             <span className="text-4xl">{g.emoji}</span>
             <h1 className="text-4xl sm:text-5xl font-display font-bold text-white">
-              {g.text},{' '}
-              <span className="gradient-text">{user?.name?.split(' ')[0]}</span>
+              {g.text},{' '}<span className="gradient-text">{user?.name?.split(' ')[0]}</span>
             </h1>
           </div>
-          <p className="text-dark-400 text-lg ml-14">Here's your financial overview for {new Date().getFullYear()}</p>
+          <p className="text-dark-500 text-base ml-12">Here's your financial overview for {new Date().getFullYear()}</p>
         </div>
-        <button onClick={() => setShowForm(true)} className="btn-primary flex items-center gap-2.5 group">
-          <HiOutlinePlus className="text-lg transition-transform duration-300 group-hover:rotate-90" />
-          <span className="hidden sm:inline">Add Transaction</span>
+        <button onClick={() => setShowForm(true)} className="btn-primary flex items-center gap-2 group px-8 py-4">
+          <HiOutlinePlus className="text-xl transition-transform duration-300 group-hover:rotate-90" />
+          <span className="hidden sm:inline text-lg">Add Transaction</span>
         </button>
       </div>
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-7 mb-12">
-        {statCards.map((card, i) => {
-          const Icon = card.icon;
-          return (
-            <div
-              key={card.label}
-              className="glass-card-hover p-8"
-              style={{
-                animationDelay: `${i * 100}ms`,
-                animation: `slideUp 0.6s ease-out ${i * 0.1}s both`,
-                backgroundImage: card.gradient,
-              }}
-            >
-              <div className="flex items-center justify-between mb-5">
-                <span className="text-base text-dark-400 font-medium tracking-wide uppercase">{card.label}</span>
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: card.iconBg }}>
-                  <Icon className={`text-2xl ${card.iconColor}`} />
-                </div>
-              </div>
-              <p className={`text-4xl font-display font-bold ${card.colorClass}`}>
-                {card.prefix}{card.value}
-              </p>
-              <div className="mt-3 flex items-center gap-2">
-                <HiOutlineSparkles className="text-primary-400 text-sm" />
-                <span className="text-sm text-dark-500">This year</span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        <div style={{ animation: 'slideUp 0.6s ease-out 0.3s both' }}>
-          <MonthlyBarChart data={monthlyData} />
-        </div>
-        <div style={{ animation: 'slideUp 0.6s ease-out 0.4s both' }}>
-          <SpendingPieChart data={categoryBreakdown} />
-        </div>
-      </div>
-
-      {/* Recent Transactions */}
-      <div style={{ animation: 'slideUp 0.6s ease-out 0.5s both' }}>
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-2xl font-display font-semibold text-white flex items-center gap-2">
-            <span>Recent Transactions</span>
-          </h2>
-          <span className="text-xs text-dark-500 font-medium px-3 py-1.5 rounded-lg" style={{ background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(255,255,255,0.04)' }}>
-            Last 5
-          </span>
-        </div>
-        <TransactionList
-          transactions={recentTransactions}
-          loading={loading}
-          onEdit={() => {}}
-          onDelete={() => {}}
+      {/* Stat Cards with count-up */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+        <StatCard
+          label="Total Balance" rawValue={stats.balance} prefix={stats.balance >= 0 ? '+' : '-'}
+          icon={HiOutlineCash}
+          colorClass={stats.balance >= 0 ? 'gradient-text-income' : 'gradient-text-expense'}
+          iconBg={stats.balance >= 0 ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)'}
+          iconColor={stats.balance >= 0 ? 'text-accent-500' : 'text-red-400'}
+          glowColor={stats.balance >= 0 ? 'rgba(34,197,94,0.06)' : 'rgba(239,68,68,0.06)'}
+          delay={0}
+        />
+        <StatCard
+          label="Total Income" rawValue={stats.income} prefix="+"
+          icon={HiOutlineTrendingUp}
+          colorClass="gradient-text-income"
+          iconBg="rgba(34,197,94,0.1)" iconColor="text-accent-500"
+          delay={0.1}
+        />
+        <StatCard
+          label="Total Expenses" rawValue={stats.expense} prefix="-"
+          icon={HiOutlineTrendingDown}
+          colorClass="gradient-text-expense"
+          iconBg="rgba(239,68,68,0.1)" iconColor="text-red-400"
+          delay={0.2}
         />
       </div>
 
-      {showForm && (
-        <TransactionForm onClose={() => setShowForm(false)} onSuccess={loadDashboard} />
-      )}
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column - 2/3 width */}
+        <div className="lg:col-span-2 space-y-8">
+          <div style={{ animation: 'slideUp 0.5s ease-out 0.3s both' }}>
+            <MonthlyBarChart data={monthlyData} />
+          </div>
+
+          <div style={{ animation: 'slideUp 0.5s ease-out 0.5s both' }}>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-display font-semibold text-white">Recent Transactions</h2>
+              <span className="text-sm text-dark-600 font-medium px-3 py-1.5 rounded-lg" style={{ background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(255,255,255,0.04)' }}>
+                Last 5
+              </span>
+            </div>
+            <TransactionList transactions={recentTransactions} loading={loading} onEdit={() => {}} onDelete={() => {}} />
+          </div>
+        </div>
+
+        {/* Right Column - 1/3 width */}
+        <div className="lg:col-span-1 space-y-8">
+          <div style={{ animation: 'slideUp 0.5s ease-out 0.4s both' }}>
+            <SpendingPieChart data={categoryBreakdown} />
+          </div>
+        </div>
+      </div>
+
+      {showForm && <TransactionForm onClose={() => setShowForm(false)} onSuccess={loadDashboard} />}
     </div>
   );
 };

@@ -2,8 +2,65 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { RiWallet3Line } from 'react-icons/ri';
-import { HiOutlineMail, HiOutlineLockClosed, HiOutlineArrowRight, HiOutlineChartPie, HiOutlineTrendingUp, HiOutlineShieldCheck, HiOutlineLightningBolt, HiOutlineStar, HiOutlineGlobe } from 'react-icons/hi';
+import { HiOutlineArrowRight, HiOutlineChartPie, HiOutlineTrendingUp, HiOutlineShieldCheck, HiOutlineLightningBolt, HiOutlineStar, HiOutlineGlobe } from 'react-icons/hi';
+
+const FinancialSVG = () => (
+  <div className="relative w-full max-w-xl mx-auto" style={{ animation: 'walletBounce 4s ease-in-out infinite' }}>
+    <svg viewBox="0 0 400 350" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+      {/* Wallet body */}
+      <rect x="100" y="120" width="200" height="140" rx="20" fill="#1e293b" stroke="#22c55e" strokeWidth="2" opacity="0.9" />
+      <rect x="100" y="120" width="200" height="50" rx="20" fill="#22c55e" opacity="0.15" />
+      <rect x="250" y="170" width="60" height="40" rx="10" fill="#0f172a" stroke="#22c55e" strokeWidth="1.5" />
+      <circle cx="280" cy="190" r="8" fill="#22c55e" opacity="0.8" />
+
+      {/* Wallet flap */}
+      <path d="M110 140 L200 125 L290 140" stroke="#22c55e" strokeWidth="1.5" opacity="0.4" fill="none" />
+
+      {/* Graph line rising */}
+      <polyline
+        points="120,230 160,210 200,220 240,190 280,170"
+        stroke="#4ade80" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"
+        strokeDasharray="200" strokeDashoffset="0"
+        style={{ animation: 'graphDraw 2s ease-out forwards' }}
+      />
+      {/* Graph dots */}
+      <circle cx="120" cy="230" r="3" fill="#22c55e" opacity="0.8" />
+      <circle cx="160" cy="210" r="3" fill="#22c55e" opacity="0.8" />
+      <circle cx="200" cy="220" r="3" fill="#22c55e" opacity="0.8" />
+      <circle cx="240" cy="190" r="4" fill="#22c55e" />
+      <circle cx="280" cy="170" r="4" fill="#4ade80" />
+
+      {/* Floating coin 1 */}
+      <g style={{ animation: 'coinFloat1 3s ease-in-out infinite' }}>
+        <circle cx="80" cy="100" r="22" fill="#22c55e" opacity="0.15" stroke="#22c55e" strokeWidth="1.5" />
+        <text x="80" y="106" textAnchor="middle" fill="#22c55e" fontSize="16" fontWeight="bold" fontFamily="Inter">₹</text>
+      </g>
+
+      {/* Floating coin 2 */}
+      <g style={{ animation: 'coinFloat2 4s ease-in-out infinite 0.5s' }}>
+        <circle cx="330" cy="90" r="18" fill="#4ade80" opacity="0.12" stroke="#4ade80" strokeWidth="1.5" />
+        <text x="330" y="96" textAnchor="middle" fill="#4ade80" fontSize="14" fontWeight="bold" fontFamily="Inter">₹</text>
+      </g>
+
+      {/* Floating coin 3 */}
+      <g style={{ animation: 'coinFloat1 3.5s ease-in-out infinite 1s' }}>
+        <circle cx="150" cy="70" r="15" fill="#22c55e" opacity="0.1" stroke="#22c55e" strokeWidth="1" />
+        <text x="150" y="75" textAnchor="middle" fill="#22c55e" fontSize="11" fontWeight="bold" fontFamily="Inter">₹</text>
+      </g>
+
+      {/* Arrow up indicator */}
+      <g style={{ animation: 'float 2s ease-in-out infinite' }}>
+        <polygon points="285,155 280,165 290,165" fill="#4ade80" />
+        <line x1="285" y1="165" x2="285" y2="175" stroke="#4ade80" strokeWidth="2" />
+      </g>
+
+      {/* Small sparkles */}
+      <circle cx="320" cy="140" r="2" fill="#22c55e" opacity="0.6" style={{ animation: 'fadeIn 1s ease-in-out infinite alternate' }} />
+      <circle cx="110" cy="160" r="1.5" fill="#4ade80" opacity="0.5" style={{ animation: 'fadeIn 1.5s ease-in-out infinite alternate 0.5s' }} />
+      <circle cx="260" cy="100" r="2" fill="#22c55e" opacity="0.4" style={{ animation: 'fadeIn 2s ease-in-out infinite alternate 1s' }} />
+    </svg>
+  </div>
+);
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -26,44 +83,48 @@ const Login = () => {
     } finally { setLoading(false); }
   };
 
-  const particles = Array.from({ length: 25 }, (_, i) => ({
-    id: i,
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
-    delay: `${Math.random() * 15}s`,
-    duration: `${10 + Math.random() * 20}s`,
-    tx: `${(Math.random() - 0.5) * 300}px`,
-    ty: `${(Math.random() - 0.5) * 300}px`,
+  const particles = Array.from({ length: 20 }, (_, i) => ({
+    id: i, left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`,
+    delay: `${Math.random() * 15}s`, duration: `${10 + Math.random() * 20}s`,
+    tx: `${(Math.random() - 0.5) * 300}px`, ty: `${(Math.random() - 0.5) * 300}px`,
     size: `${2 + Math.random() * 3}px`,
   }));
 
   const features = [
-    { icon: HiOutlineChartPie, title: 'Smart Analytics', desc: 'Visualize your spending patterns with beautiful interactive charts and real-time category breakdowns.', color: '#818cf8' },
-    { icon: HiOutlineTrendingUp, title: 'Budget Tracking', desc: 'Set monthly budgets per category and get visual warnings when approaching your spending limits.', color: '#34d399' },
-    { icon: HiOutlineShieldCheck, title: 'Secure & Private', desc: 'Your financial data stays private with JWT-based authentication and encrypted connections.', color: '#f472b6' },
-    { icon: HiOutlineLightningBolt, title: 'Instant Reports', desc: 'Generate detailed yearly reports with income vs expense trends and category-wise breakdowns.', color: '#fbbf24' },
+    { icon: HiOutlineChartPie, title: 'Smart Analytics', desc: 'Beautiful interactive charts and real-time category breakdowns.', color: '#22c55e' },
+    { icon: HiOutlineTrendingUp, title: 'Budget Tracking', desc: 'Set budgets per category with visual warnings.', color: '#4ade80' },
+    { icon: HiOutlineShieldCheck, title: 'Secure & Private', desc: 'JWT authentication and encrypted connections.', color: '#10b981' },
+    { icon: HiOutlineLightningBolt, title: 'Instant Reports', desc: 'Detailed yearly reports with trend analysis.', color: '#86efac' },
   ];
 
   const testimonials = [
-    { name: 'Priya Sharma', role: 'Freelancer', text: 'WalletWise helped me understand where my money goes each month. The budget alerts are a game changer!', avatar: 'PS' },
-    { name: 'Rahul Verma', role: 'Software Engineer', text: 'Clean interface, powerful analytics. I\'ve saved ₹15,000 more per month since I started tracking.', avatar: 'RV' },
-    { name: 'Anita Desai', role: 'Small Business Owner', text: 'The category breakdown charts are incredible. Finally, I can see my spending habits clearly.', avatar: 'AD' },
-  ];
-
-  const stats = [
-    { value: '10K+', label: 'Active Users', color: 'gradient-text' },
-    { value: '₹50Cr+', label: 'Money Tracked', color: 'gradient-text-income' },
-    { value: '99.9%', label: 'Uptime', color: 'gradient-text' },
-    { value: '4.8★', label: 'User Rating', color: 'gradient-text-expense' },
+    { name: 'Priya Sharma', role: 'Freelancer', text: 'WalletWise helped me understand where my money goes. The budget alerts are a game changer!', avatar: 'PS' },
+    { name: 'Rahul Verma', role: 'Software Engineer', text: 'Clean interface, powerful analytics. I\'ve saved ₹15,000 more per month since tracking.', avatar: 'RV' },
+    { name: 'Anita Desai', role: 'Small Business Owner', text: 'The category breakdown charts are incredible. I can finally see my spending habits clearly.', avatar: 'AD' },
   ];
 
   return (
     <div className="min-h-screen overflow-y-auto">
-      {/* Animated background — clean orbs only, no confusing shapes */}
+      {/* Top Navbar */}
+      <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 sm:px-12 lg:px-16 py-6 font-display">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+            style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '0 8px 30px rgba(34,197,94,0.4)' }}>
+            <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="6" width="20" height="14" rx="3" /><path d="M16 10h.01" /><path d="M2 10h20" />
+            </svg>
+          </div>
+          <span className="text-3xl font-black text-white tracking-tight">Wallet<span className="text-accent-500">Wise</span></span>
+        </div>
+        <div className="flex items-center gap-5">
+          <Link to="/login" className="text-dark-300 hover:text-white font-semibold transition-colors text-lg">Log In</Link>
+          <Link to="/register" className="btn-primary px-7 py-3 text-lg font-semibold rounded-xl">Get Started</Link>
+        </div>
+      </header>
+
+      {/* Background */}
       <div className="auth-bg">
-        <div className="orb orb-1" />
-        <div className="orb orb-2" />
-        <div className="orb orb-3" />
+        <div className="orb orb-1" /><div className="orb orb-2" /><div className="orb orb-3" />
         <div className="grid-overlay" />
         <div className="particles">
           {particles.map((p) => (
@@ -72,120 +133,103 @@ const Login = () => {
         </div>
       </div>
 
-      {/* ===== SECTION 1: HERO + LOGIN (viewport height) ===== */}
+      {/* HERO + LOGIN */}
       <section className="min-h-screen flex relative z-10">
-        {/* LEFT: HERO */}
-        <div className="hidden lg:flex flex-1 items-center justify-center px-12 xl:px-20">
-          <div style={{ animation: 'slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)' }} className="max-w-xl">
-            {/* Logo */}
-            <div className="flex items-center gap-5 mb-12">
-              <div className="w-20 h-20 rounded-3xl flex items-center justify-center relative"
-                style={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #7c3aed 100%)',
-                  boxShadow: '0 12px 40px rgba(99, 102, 241, 0.5)',
-                }}
-              >
-                <RiWallet3Line className="text-white text-5xl" />
-                <div className="absolute inset-0 rounded-3xl" style={{ animation: 'pulse-glow 3s ease-in-out infinite' }} />
+        {/* Left: SVG Illustration */}
+        <div className="hidden lg:flex flex-1 items-center justify-center px-12 xl:px-16">
+          <div style={{ animation: 'slideUp 0.8s ease-out' }} className="max-w-3xl w-full xl:scale-110">
+            <FinancialSVG />
+            <div className="text-center mt-12">
+              <h1 className="text-5xl xl:text-6xl font-display font-extrabold text-white leading-tight mb-5">
+                Your money,{' '}<span className="gradient-text">your rules.</span>
+              </h1>
+              <p className="text-xl text-dark-400 leading-relaxed max-w-lg mx-auto">
+                Track every rupee, set smart budgets, and see exactly where your money goes.
+              </p>
+              <div className="flex items-center justify-center gap-5 mt-8 text-dark-500 text-sm">
+                <span className="flex items-center gap-1.5"><HiOutlineShieldCheck className="text-accent-400" />Encrypted</span>
+                <span className="text-dark-700">•</span>
+                <span className="flex items-center gap-1.5"><HiOutlineGlobe className="text-accent-400" />Works Offline</span>
+                <span className="text-dark-700">•</span>
+                <span className="flex items-center gap-1.5"><HiOutlineStar className="text-yellow-400" />Free Forever</span>
               </div>
-              <span className="text-5xl font-display font-bold gradient-text">WalletWise</span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="text-5xl xl:text-6xl font-display font-extrabold text-white leading-[1.15] mb-6">
-              Your money,{' '}
-              <span className="gradient-text">your rules.</span>
-            </h1>
-            <p className="text-xl text-dark-300 mb-14 leading-relaxed">
-              Track every rupee, set smart budgets, and see exactly where your money goes — with beautiful charts and instant insights.
-            </p>
-
-            {/* Stats row */}
-            <div className="grid grid-cols-4 gap-4 mb-14">
-              {stats.map((s) => (
-                <div key={s.label} className="text-center">
-                  <p className={`text-2xl font-display font-bold ${s.color}`}>{s.value}</p>
-                  <p className="text-xs text-dark-500 mt-1">{s.label}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Trust badges */}
-            <div className="flex items-center gap-3 text-dark-500 text-sm">
-              <HiOutlineShieldCheck className="text-income text-lg" />
-              <span>256-bit Encryption</span>
-              <span className="text-dark-700">•</span>
-              <HiOutlineGlobe className="text-primary-400 text-lg" />
-              <span>Works Offline</span>
-              <span className="text-dark-700">•</span>
-              <HiOutlineStar className="text-yellow-400 text-lg" />
-              <span>Free Forever</span>
             </div>
           </div>
         </div>
 
-        {/* RIGHT: LOGIN FORM */}
-        <div className="flex-1 flex items-center justify-center px-6 sm:px-12 lg:px-16 xl:px-20">
-          <div className="w-full max-w-xl" style={{ animation: 'slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both' }}>
-            {/* Mobile Logo */}
-            <div className="lg:hidden text-center mb-10">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl mb-5"
-                style={{ background: 'linear-gradient(135deg, #6366f1 0%, #7c3aed 100%)', boxShadow: '0 12px 40px rgba(99, 102, 241, 0.5)' }}>
-                <RiWallet3Line className="text-white text-5xl" />
+        {/* Right: Login Form */}
+        <div className="flex-1 flex items-center justify-center px-6 sm:px-12 lg:px-16">
+          <div className="w-full max-w-lg" style={{ animation: 'slideUp 0.8s ease-out 0.15s both' }}>
+            {/* Header with Logo */}
+            <div className="mb-12">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl"
+                  style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '0 8px 30px rgba(34,197,94,0.4)' }}>
+                  <svg viewBox="0 0 24 24" className="w-8 h-8" fill="none" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="6" width="20" height="14" rx="3" /><path d="M16 10h.01" /><path d="M2 10h20" />
+                  </svg>
+                </div>
+                <h1 className="text-4xl font-display font-black tracking-tight text-white">Wallet<span className="text-accent-500">Wise</span></h1>
               </div>
-              <h1 className="text-4xl font-display font-bold gradient-text mb-2">WalletWise</h1>
-              <p className="text-dark-400">Your money, your rules.</p>
+              <h2 className="text-4xl font-display font-bold text-white mb-2">Welcome back</h2>
+              <p className="text-xl text-dark-400">Sign in to continue to your account</p>
             </div>
 
-            <div className="mb-8">
-              <h2 className="text-3xl font-display font-bold text-white mb-2">Welcome back</h2>
-              <p className="text-lg text-dark-400">Sign in to your account to continue</p>
-            </div>
-
-            <div className="glass-card p-10 relative overflow-hidden" style={{ animation: 'borderGlow 4s ease-in-out infinite' }}>
-              <div className="shimmer absolute inset-0 pointer-events-none" />
-              <form onSubmit={handleSubmit} className="space-y-7 relative">
-                <div>
-                  <label htmlFor="login-email" className="label flex items-center gap-2">
-                    <HiOutlineMail className={`text-lg transition-colors duration-300 ${focusedField === 'email' ? 'text-primary-400' : 'text-dark-500'}`} />
+            <div className="glass-card p-10" style={{ animation: 'borderGlow 4s ease-in-out infinite' }}>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Email — floating label style */}
+                <div className="relative">
+                  <input
+                    id="login-email" type="email" value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onFocus={() => setFocusedField('email')}
+                    onBlur={() => setFocusedField(null)}
+                    className="input-field peer pt-8 pb-3 px-6 text-lg" placeholder=" " required
+                  />
+                  <label htmlFor="login-email"
+                    className="absolute left-6 top-1/2 -translate-y-1/2 text-dark-500 text-base transition-all duration-200 pointer-events-none
+                      peer-focus:top-4 peer-focus:text-sm peer-focus:text-accent-400
+                      peer-[:not(:placeholder-shown)]:top-4 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-dark-400"
+                  >
                     Email Address
                   </label>
-                  <div className="relative">
-                    <input id="login-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                      onFocus={() => setFocusedField('email')} onBlur={() => setFocusedField(null)}
-                      className="input-field text-lg" placeholder="you@example.com" required />
-                    {focusedField === 'email' && <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary-500 to-transparent rounded-full" style={{ animation: 'fadeIn 0.3s ease' }} />}
-                  </div>
+                  {focusedField === 'email' && <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent-500 to-transparent rounded-full" />}
                 </div>
 
-                <div>
-                  <label htmlFor="login-password" className="label flex items-center gap-2">
-                    <HiOutlineLockClosed className={`text-lg transition-colors duration-300 ${focusedField === 'password' ? 'text-primary-400' : 'text-dark-500'}`} />
+                {/* Password — floating label style */}
+                <div className="relative">
+                  <input
+                    id="login-password" type="password" value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onFocus={() => setFocusedField('password')}
+                    onBlur={() => setFocusedField(null)}
+                    className="input-field peer pt-8 pb-3 px-6 text-lg tracking-widest" placeholder=" " required
+                  />
+                  <label htmlFor="login-password"
+                    className="absolute left-6 top-1/2 -translate-y-1/2 text-dark-500 text-base tracking-normal transition-all duration-200 pointer-events-none
+                      peer-focus:top-4 peer-focus:text-sm peer-focus:text-accent-400
+                      peer-[:not(:placeholder-shown)]:top-4 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-dark-400"
+                  >
                     Password
                   </label>
-                  <div className="relative">
-                    <input id="login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                      onFocus={() => setFocusedField('password')} onBlur={() => setFocusedField(null)}
-                      className="input-field text-lg" placeholder="••••••••" required />
-                    {focusedField === 'password' && <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary-500 to-transparent rounded-full" style={{ animation: 'fadeIn 0.3s ease' }} />}
-                  </div>
+                  {focusedField === 'password' && <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent-500 to-transparent rounded-full" />}
                 </div>
 
                 <button type="submit" disabled={loading}
-                  className="btn-primary w-full text-center py-4 text-lg flex items-center justify-center gap-3 group">
+                  className="btn-primary w-full py-4 text-lg font-semibold flex items-center justify-center gap-3 group mt-4 relative overflow-hidden">
                   {loading ? (
                     <span className="flex items-center gap-3">
-                      <svg className="animate-spin h-6 w-6" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                       Signing in...
                     </span>
-                  ) : (<>Sign In<HiOutlineArrowRight className="text-xl transition-transform duration-300 group-hover:translate-x-2" /></>)}
+                  ) : (<>Sign In<HiOutlineArrowRight className="text-lg transition-transform duration-300 group-hover:translate-x-2" /></>)}
                 </button>
               </form>
             </div>
 
-            <p className="text-center text-dark-400 mt-8 text-base">
+            <p className="text-center text-dark-400 mt-10 text-lg">
               Don't have an account?{' '}
-              <Link to="/register" className="text-primary-400 hover:text-primary-300 font-semibold transition-all duration-300 hover:underline underline-offset-4 decoration-primary-500/30">
+              <Link to="/register" className="text-accent-400 hover:text-accent-300 font-semibold transition-colors underline-offset-4 decoration-accent-500/30">
                 Create one →
               </Link>
             </p>
@@ -193,31 +237,31 @@ const Login = () => {
         </div>
       </section>
 
-      {/* ===== SECTION 2: FEATURES ===== */}
-      <section className="relative z-10 py-24 px-6 sm:px-12 lg:px-20" style={{ borderTop: '1px solid rgba(255,255,255,0.03)' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16" style={{ animation: 'slideUp 0.6s ease-out' }}>
-            <p className="text-primary-400 font-semibold text-sm uppercase tracking-[0.2em] mb-3">Why WalletWise?</p>
-            <h2 className="text-4xl xl:text-5xl font-display font-bold text-white mb-4">
+      {/* FEATURES */}
+      <section className="relative z-10 py-20 px-6 sm:px-12 lg:px-16" style={{ borderTop: '1px solid rgba(255,255,255,0.03)' }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-accent-400 font-semibold text-xs uppercase tracking-[0.2em] mb-3">Why WalletWise?</p>
+            <h2 className="text-3xl xl:text-4xl font-display font-bold text-white mb-3">
               Everything you need to{' '}<span className="gradient-text">manage money</span>
             </h2>
-            <p className="text-lg text-dark-400 max-w-2xl mx-auto">
-              Simple but powerful tools to track, budget, and understand your finances — all in one place.
+            <p className="text-dark-400 max-w-xl mx-auto">
+              Simple but powerful tools to track, budget, and understand your finances.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {features.map((f, i) => {
               const Icon = f.icon;
               return (
-                <div key={f.title} className="glass-card-hover p-8 group cursor-default"
-                  style={{ animation: `slideUp 0.6s ease-out ${0.1 + i * 0.1}s both` }}>
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110"
-                    style={{ background: `${f.color}12` }}>
-                    <Icon className="text-2xl" style={{ color: f.color }} />
+                <div key={f.title} className="glass-card-hover p-10 group cursor-default"
+                  style={{ animation: `slideUp 0.5s ease-out ${0.1 + i * 0.08}s both` }}>
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
+                    style={{ background: `${f.color}15` }}>
+                    <Icon className="text-3xl" style={{ color: f.color }} />
                   </div>
-                  <h3 className="text-xl font-display font-semibold text-white mb-3">{f.title}</h3>
-                  <p className="text-dark-400 leading-relaxed text-[0.95rem]">{f.desc}</p>
+                  <h3 className="text-2xl font-display font-semibold text-white mb-3">{f.title}</h3>
+                  <p className="text-dark-400 text-lg leading-relaxed">{f.desc}</p>
                 </div>
               );
             })}
@@ -225,57 +269,53 @@ const Login = () => {
         </div>
       </section>
 
-      {/* ===== SECTION 3: TESTIMONIALS ===== */}
-      <section className="relative z-10 py-24 px-6 sm:px-12 lg:px-20" style={{ borderTop: '1px solid rgba(255,255,255,0.03)' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-income font-semibold text-sm uppercase tracking-[0.2em] mb-3">Loved by users</p>
-            <h2 className="text-4xl xl:text-5xl font-display font-bold text-white mb-4">
-              What our <span className="gradient-text-income">users</span> say
+      {/* TESTIMONIALS */}
+      <section className="relative z-10 py-20 px-6 sm:px-12 lg:px-16" style={{ borderTop: '1px solid rgba(255,255,255,0.03)' }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-accent-400 font-semibold text-xs uppercase tracking-[0.2em] mb-3">Loved by users</p>
+            <h2 className="text-3xl xl:text-4xl font-display font-bold text-white">
+              What our <span className="gradient-text">users</span> say
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {testimonials.map((t, i) => (
-              <div key={t.name} className="glass-card-hover p-8 cursor-default"
-                style={{ animation: `slideUp 0.5s ease-out ${i * 0.1}s both` }}>
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm"
-                    style={{ background: 'linear-gradient(135deg, #6366f1, #7c3aed)', boxShadow: '0 4px 12px rgba(99,102,241,0.25)' }}>
+              <div key={t.name} className="glass-card-hover p-10 cursor-default"
+                style={{ animation: `slideUp 0.5s ease-out ${i * 0.08}s both` }}>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 rounded-xl flex items-center justify-center text-dark-900 font-bold text-lg"
+                    style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}>
                     {t.avatar}
                   </div>
                   <div>
-                    <p className="text-white font-semibold text-[0.95rem]">{t.name}</p>
-                    <p className="text-dark-500 text-sm">{t.role}</p>
+                    <p className="text-white font-semibold text-lg">{t.name}</p>
+                    <p className="text-dark-500 text-sm mt-0.5">{t.role}</p>
                   </div>
                 </div>
-                <p className="text-dark-300 leading-relaxed text-[0.95rem] italic">"{t.text}"</p>
+                <p className="text-dark-300 text-lg leading-relaxed italic">"{t.text}"</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ===== SECTION 4: CTA ===== */}
-      <section className="relative z-10 py-24 px-6 sm:px-12 lg:px-20" style={{ borderTop: '1px solid rgba(255,255,255,0.03)' }}>
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl xl:text-5xl font-display font-bold text-white mb-5">
-            Ready to take control?
-          </h2>
-          <p className="text-lg text-dark-400 mb-10">
-            Sign up in seconds and start tracking your finances today. No credit card needed.
-          </p>
-          <Link to="/register" className="btn-primary inline-flex items-center gap-3 text-lg px-10 py-5 group">
+      {/* CTA */}
+      <section className="relative z-10 py-20 px-6" style={{ borderTop: '1px solid rgba(255,255,255,0.03)' }}>
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-4xl xl:text-5xl font-display font-bold text-white mb-6">Ready to take control?</h2>
+          <p className="text-dark-400 text-xl max-w-xl mx-auto mb-10">Sign up in seconds and start tracking your finances today.</p>
+          <Link to="/register" className="btn-primary inline-flex items-center gap-3 text-xl px-12 py-5 group">
             Get Started Free
-            <HiOutlineArrowRight className="text-xl transition-transform duration-300 group-hover:translate-x-2" />
+            <HiOutlineArrowRight className="text-2xl transition-transform duration-300 group-hover:translate-x-3" />
           </Link>
-          <p className="text-dark-600 text-sm mt-6">Free forever • No credit card • Cancel anytime</p>
+          <p className="text-dark-600 text-sm mt-8">Free forever • No credit card • Cancel anytime</p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 py-10 px-6 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.03)' }}>
-        <p className="text-dark-600 text-sm">© 2026 WalletWise. Built with ❤️ for smart money management.</p>
+      <footer className="relative z-10 py-8 px-6 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.03)' }}>
+        <p className="text-dark-600 text-xs">© 2026 WalletWise. Built with ❤️ for smart money management.</p>
       </footer>
     </div>
   );

@@ -67,12 +67,12 @@ const TransactionForm = ({ onClose, onSuccess, editData = null }) => {
               type="button"
               onClick={() => setForm({ ...form, type: 'expense', categoryId: '' })}
               className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-500 relative overflow-hidden ${
-                form.type === 'expense' ? 'text-expense-light' : 'text-dark-400 hover:text-dark-200'
+                form.type === 'expense' ? 'text-red-400' : 'text-dark-400 hover:text-dark-200'
               }`}
               style={form.type === 'expense' ? {
-                background: 'rgba(244, 63, 94, 0.15)',
-                border: '1px solid rgba(244, 63, 94, 0.3)',
-                boxShadow: '0 4px 20px rgba(244, 63, 94, 0.15)',
+                background: 'rgba(239, 68, 68, 0.12)',
+                border: '1px solid rgba(239, 68, 68, 0.25)',
+                boxShadow: '0 4px 20px rgba(239, 68, 68, 0.1)',
               } : { border: '1px solid transparent' }}
             >
               💸 Expense
@@ -81,12 +81,12 @@ const TransactionForm = ({ onClose, onSuccess, editData = null }) => {
               type="button"
               onClick={() => setForm({ ...form, type: 'income', categoryId: '' })}
               className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-500 ${
-                form.type === 'income' ? 'text-income-light' : 'text-dark-400 hover:text-dark-200'
+                form.type === 'income' ? 'text-accent-400' : 'text-dark-400 hover:text-dark-200'
               }`}
               style={form.type === 'income' ? {
-                background: 'rgba(16, 185, 129, 0.15)',
-                border: '1px solid rgba(16, 185, 129, 0.3)',
-                boxShadow: '0 4px 20px rgba(16, 185, 129, 0.15)',
+                background: 'rgba(34, 197, 94, 0.12)',
+                border: '1px solid rgba(34, 197, 94, 0.25)',
+                boxShadow: '0 4px 20px rgba(34, 197, 94, 0.1)',
               } : { border: '1px solid transparent' }}
             >
               💰 Income
@@ -126,8 +126,8 @@ const TransactionForm = ({ onClose, onSuccess, editData = null }) => {
             <button type="submit" disabled={loading}
               className={`flex-1 py-4 text-base rounded-xl font-semibold transition-all duration-300 ${
                 form.type === 'expense' 
-                  ? 'border border-expense/30 bg-expense/20 text-expense-light hover:bg-expense/30 hover:border-expense/50 shadow-[0_4px_20px_rgba(244,63,94,0.15)]' 
-                  : 'border border-income/30 bg-income/20 text-income-light hover:bg-income/30 hover:border-income/50 shadow-[0_4px_20px_rgba(16,185,129,0.15)]'
+                  ? 'border border-red-500/25 bg-red-500/15 text-red-400 hover:bg-red-500/25 hover:border-red-500/40' 
+                  : 'border border-accent-500/25 bg-accent-500/15 text-accent-400 hover:bg-accent-500/25 hover:border-accent-500/40'
               }`}
             >
               {loading ? 'Saving...' : editData ? 'Update Transaction' : 'Add Transaction'}

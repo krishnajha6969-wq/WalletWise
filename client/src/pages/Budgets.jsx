@@ -155,7 +155,7 @@ const Budgets = () => {
                 </div>
               )}
               <div>
-                <label className="label">Budget Amount ($)</label>
+                <label className="label">Budget Amount (₹)</label>
                 <input type="number" step="0.01" min="0.01" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} className="input-field text-xl font-bold" placeholder="0.00" required />
               </div>
               {!editData && (

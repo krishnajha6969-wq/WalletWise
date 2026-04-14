@@ -11,17 +11,17 @@ export default {
         display: ['Outfit', 'system-ui', 'sans-serif'],
       },
       colors: {
-        primary: {
-          50: '#eef2ff',
-          100: '#e0e7ff',
-          200: '#c7d2fe',
-          300: '#a5b4fc',
-          400: '#818cf8',
-          500: '#6366f1',
-          600: '#4f46e5',
-          700: '#4338ca',
-          800: '#3730a3',
-          900: '#312e81',
+        accent: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
         },
         dark: {
           50: '#f8fafc',
@@ -42,9 +42,9 @@ export default {
           dark: '#059669',
         },
         expense: {
-          DEFAULT: '#f43f5e',
-          light: '#fb7185',
-          dark: '#e11d48',
+          DEFAULT: '#ef4444',
+          light: '#f87171',
+          dark: '#dc2626',
         },
       },
       backgroundImage: {
@@ -53,9 +53,9 @@ export default {
       },
       boxShadow: {
         'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-        'glow-primary': '0 0 20px rgba(99, 102, 241, 0.3)',
+        'glow-accent': '0 0 20px rgba(34, 197, 94, 0.3)',
         'glow-income': '0 0 20px rgba(16, 185, 129, 0.3)',
-        'glow-expense': '0 0 20px rgba(244, 63, 94, 0.3)',
+        'glow-expense': '0 0 20px rgba(239, 68, 68, 0.3)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',
