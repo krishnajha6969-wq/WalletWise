@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { mockApi } from '../services/mockData';
+import api from '../services/api';
 import toast from 'react-hot-toast';
 import { HiOutlineX } from 'react-icons/hi';
 
@@ -18,8 +18,8 @@ const TransactionForm = ({ onClose, onSuccess, editData = null }) => {
 
   const fetchCategories = async () => {
     try {
-      const res = await mockApi.getCategories();
-      setCategories(res.categories);
+      const res = await api.get('/categories');
+      setCategories(res.data.categories);
     } catch { toast.error('Failed to load categories'); }
   };
 
@@ -34,10 +34,10 @@ const TransactionForm = ({ onClose, onSuccess, editData = null }) => {
     setLoading(true);
     try {
       if (editData) {
-        await mockApi.updateTransaction(editData.id, form);
+        await api.put(`/transactions/${editData.id}`, form);
         toast.success('Transaction updated!');
       } else {
-        await mockApi.createTransaction(form);
+        await api.post('/transactions', form);
         toast.success('Transaction added! 🎉');
       }
       onSuccess?.();

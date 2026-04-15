@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { mockApi } from '../services/mockData';
+import api from '../services/api';
 import toast from 'react-hot-toast';
 import useCountUp from '../hooks/useCountUp';
 import SpendingPieChart from '../components/Charts/SpendingPieChart';
@@ -59,14 +59,14 @@ const Dashboard = () => {
     setLoading(true);
     try {
       const [txRes, monthlyRes, categoryRes] = await Promise.all([
-        mockApi.getTransactions({ limit: 5 }),
-        mockApi.getMonthlySummary(new Date().getFullYear()),
-        mockApi.getCategoryBreakdown({ year: new Date().getFullYear() }),
+        api.get('/transactions', { params: { limit: 5 } }),
+        api.get('/reports/monthly-summary', { params: { year: new Date().getFullYear() } }),
+        api.get('/reports/category-breakdown', { params: { year: new Date().getFullYear() } }),
       ]);
-      setRecentTransactions(txRes.transactions);
-      setMonthlyData(monthlyRes.data);
-      setCategoryBreakdown(categoryRes.breakdown);
-      const totals = monthlyRes.data.reduce(
+      setRecentTransactions(txRes.data.transactions);
+      setMonthlyData(monthlyRes.data.data);
+      setCategoryBreakdown(categoryRes.data.breakdown);
+      const totals = monthlyRes.data.data.reduce(
         (acc, m) => ({ income: acc.income + m.income, expense: acc.expense + m.expense }),
         { income: 0, expense: 0 }
       );

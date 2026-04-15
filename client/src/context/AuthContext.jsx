@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { mockApi } from '../services/mockData';
+import api from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -18,8 +18,8 @@ export const AuthProvider = ({ children }) => {
     const loadUser = async () => {
       if (token) {
         try {
-          const res = await mockApi.getMe();
-          setUser(res.user);
+          const res = await api.get('/auth/me');
+          setUser(res.data.user);
         } catch {
           logout();
         }
@@ -30,21 +30,23 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const login = async (email, password) => {
-    const res = await mockApi.login(email, password);
-    setUser(res.user);
-    setToken(res.token);
-    localStorage.setItem('walletwise_token', res.token);
-    localStorage.setItem('walletwise_user', JSON.stringify(res.user));
-    return res;
+    const res = await api.post('/auth/login', { email, password });
+    const { user, token } = res.data;
+    setUser(user);
+    setToken(token);
+    localStorage.setItem('walletwise_token', token);
+    localStorage.setItem('walletwise_user', JSON.stringify(user));
+    return res.data;
   };
 
   const register = async (name, email, password) => {
-    const res = await mockApi.register(name, email);
-    setUser(res.user);
-    setToken(res.token);
-    localStorage.setItem('walletwise_token', res.token);
-    localStorage.setItem('walletwise_user', JSON.stringify(res.user));
-    return res;
+    const res = await api.post('/auth/register', { name, email, password });
+    const { user, token } = res.data;
+    setUser(user);
+    setToken(token);
+    localStorage.setItem('walletwise_token', token);
+    localStorage.setItem('walletwise_user', JSON.stringify(user));
+    return res.data;
   };
 
   const logout = () => {

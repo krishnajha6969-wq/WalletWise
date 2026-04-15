@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { mockApi } from '../services/mockData';
+import api from '../services/api';
 import toast from 'react-hot-toast';
 import BudgetCard from '../components/BudgetCard';
 import { HiOutlinePlus, HiOutlineX } from 'react-icons/hi';
@@ -19,16 +19,16 @@ const Budgets = () => {
   const fetchBudgets = async () => {
     setLoading(true);
     try {
-      const res = await mockApi.getBudgets({ month, year });
-      setBudgets(res.budgets);
+      const res = await api.get('/budgets', { params: { month, year } });
+      setBudgets(res.data.budgets);
     } catch { toast.error('Failed to load budgets'); }
     finally { setLoading(false); }
   };
 
   const fetchCategories = async () => {
     try {
-      const res = await mockApi.getCategories();
-      setCategories(res.categories.filter((c) => c.type === 'expense'));
+      const res = await api.get('/categories');
+      setCategories(res.data.categories.filter((c) => c.type === 'expense'));
     } catch {}
   };
 
@@ -37,10 +37,10 @@ const Budgets = () => {
     if (!form.amount || !form.categoryId) { toast.error('Please fill in all fields'); return; }
     try {
       if (editData) {
-        await mockApi.updateBudget(editData.id, { amount: form.amount });
+        await api.put(`/budgets/${editData.id}`, { amount: form.amount });
         toast.success('Budget updated!');
       } else {
-        await mockApi.createBudget(form);
+        await api.post('/budgets', form);
         toast.success('Budget created!');
       }
       setShowForm(false); setEditData(null);
@@ -57,7 +57,7 @@ const Budgets = () => {
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this budget?')) return;
-    try { await mockApi.deleteBudget(id); toast.success('Budget deleted'); fetchBudgets(); }
+    try { await api.delete(`/budgets/${id}`); toast.success('Budget deleted'); fetchBudgets(); }
     catch { toast.error('Failed to delete'); }
   };
 

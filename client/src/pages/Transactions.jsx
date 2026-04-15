@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { mockApi } from '../services/mockData';
+import api from '../services/api';
 import toast from 'react-hot-toast';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
@@ -17,7 +17,7 @@ const Transactions = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    mockApi.getCategories().then(res => setCategories(res.categories)).catch(() => {});
+    api.get('/categories').then(res => setCategories(res.data.categories)).catch(() => {});
   }, []);
 
   useEffect(() => { fetchTransactions(); }, [page, filters]);
@@ -25,9 +25,9 @@ const Transactions = () => {
   const fetchTransactions = async () => {
     setLoading(true);
     try {
-      const res = await mockApi.getTransactions({ page, limit: 15, ...filters });
-      setTransactions(res.transactions);
-      setTotalPages(res.totalPages);
+      const res = await api.get('/transactions', { params: { page, limit: 15, ...filters } });
+      setTransactions(res.data.transactions);
+      setTotalPages(res.data.totalPages);
     } catch {
       toast.error('Failed to load transactions');
     } finally {
@@ -38,7 +38,7 @@ const Transactions = () => {
   const handleDelete = async (id) => {
     if (!confirm('Delete this transaction?')) return;
     try {
-      await mockApi.deleteTransaction(id);
+      await api.delete(`/transactions/${id}`);
       toast.success('Transaction deleted');
       fetchTransactions();
     } catch { toast.error('Failed to delete'); }

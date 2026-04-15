@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { mockApi } from '../services/mockData';
+import api from '../services/api';
 import toast from 'react-hot-toast';
 import SpendingPieChart from '../components/Charts/SpendingPieChart';
 import MonthlyBarChart from '../components/Charts/MonthlyBarChart';
@@ -18,13 +18,13 @@ const Reports = () => {
     setLoading(true);
     try {
       const [monthlyRes, expenseCatRes, incomeCatRes] = await Promise.all([
-        mockApi.getMonthlySummary(year),
-        mockApi.getCategoryBreakdown({ year, type: 'expense' }),
-        mockApi.getCategoryBreakdown({ year, type: 'income' }),
+        api.get('/reports/monthly-summary', { params: { year } }),
+        api.get('/reports/category-breakdown', { params: { year, type: 'expense' } }),
+        api.get('/reports/category-breakdown', { params: { year, type: 'income' } }),
       ]);
-      setMonthlyData(monthlyRes.data);
-      setCategoryBreakdown(expenseCatRes.breakdown);
-      setIncomeBreakdown(incomeCatRes.breakdown);
+      setMonthlyData(monthlyRes.data.data);
+      setCategoryBreakdown(expenseCatRes.data.breakdown);
+      setIncomeBreakdown(incomeCatRes.data.breakdown);
     } catch { toast.error('Failed to load reports'); }
     finally { setLoading(false); }
   };
